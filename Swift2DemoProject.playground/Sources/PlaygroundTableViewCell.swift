@@ -5,25 +5,23 @@ public protocol FOCUSTeaser {
     var model : PlaygroundTeaserModel? { get set }
 }
 
+extension UILabel {
+    class func standardLabelWithSize(size : CGFloat) -> UILabel {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 0
+        label.font = UIFont.systemFontOfSize(size)
+        return label
+    }
+}
+
 public class PlaygroundTableViewCell : UITableViewCell, FOCUSTeaser
 {
     static let identifier = "PlaygroundCell"
     
-    let headlineLabel :UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.numberOfLines = 0
-        label.font = UIFont.systemFontOfSize(16)
-        return label
-        }()
+    let headlineLabel = UILabel.standardLabelWithSize(16)
     
-    let overheadLabel : UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.numberOfLines = 0
-        label.font = UIFont.systemFontOfSize(12)
-        return label
-        }()
+    let overheadLabel = UILabel.standardLabelWithSize(12)
     
     let teaserImageView : UIImageView = {
         let imageView = UIImageView()
@@ -36,9 +34,7 @@ public class PlaygroundTableViewCell : UITableViewCell, FOCUSTeaser
         didSet{
             headlineLabel.text = model?.headline
             overheadLabel.text = model?.overhead
-            let image = UIImage(named: "ressort-auto_iPhone")
-            print(image)
-            teaserImageView.image = image
+            teaserImageView.image = UIImage(named: "ressort-auto_iPhone")
         }
     }
     
@@ -60,9 +56,11 @@ public class PlaygroundTableViewCell : UITableViewCell, FOCUSTeaser
     {
         let views = ["headlineLabel" : headlineLabel, "overheadLabel" : overheadLabel, "teaserImageView" : teaserImageView]
         
+        teaserImageView.setContentHuggingPriority(249, forAxis: .Vertical)
+        
         self.contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("|-[teaserImageView(50)]-[headlineLabel]-|", options: NSLayoutFormatOptions(), metrics: [:], views: views))
         self.contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("[teaserImageView]-[overheadLabel]-|", options: [], metrics: [:], views: views))
         self.contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-[overheadLabel]-[headlineLabel]-|", options: [], metrics: [:], views: views))
-        self.contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-[teaserImageView(50)]-|", options: [], metrics: [:], views: views))
+        self.contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-[teaserImageView(50)]-(>=20)-|", options: [], metrics: [:], views: views))
     }
 }
