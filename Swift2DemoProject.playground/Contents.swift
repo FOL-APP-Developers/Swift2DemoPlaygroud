@@ -11,9 +11,9 @@ let navigationController = UINavigationController(rootViewController: tableviewC
 navigationController.view.frame = CGRect(x: 0, y: 0, width: 320, height: 640)
 
 getOfflineJSON(tableviewController.setModelsWithJSON)
-
+//
 //XCPSetExecutionShouldContinueIndefinitely()
-//NetworkRequestHandler.getJSON(tableviewController.setModelsWithJSON)
+//NetworkRequestHandler.getOverviewJSON(tableviewController.setModelsWithJSON)
 
 XCPShowView("TableView", view: navigationController.view)
 

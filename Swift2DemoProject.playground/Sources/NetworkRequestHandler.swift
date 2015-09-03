@@ -6,18 +6,15 @@ public typealias JSONArray = [JSONDict]
 public class NetworkRequestHandler {
     static let sharedInstance = NetworkRequestHandler()
     
-    public class func getJSON(completionBlock: (JSONDict) -> Void)
+    public class func getOverviewJSON(completionBlock: (JSONDict) -> Void)
     {
-        let jsonURLString = "http://json.focus.de/home/?cst=7"
-        guard let jsonURL = NSURL(string: jsonURLString) else {return}
+        guard let jsonURL = NSURL(string: "http://json.focus.de/home/?cst=7") else {return}
         
         sharedInstance.getJSONForURL(jsonURL, withCompletionBlock: completionBlock)
     }
     
     func getJSONForURL(jsonURL : NSURL, withCompletionBlock completionBlock: (JSONDict) -> Void) {
-        let session = NSURLSession.sharedSession()
-        let task = session.dataTaskWithURL(jsonURL, completionHandler: handleSessionResponseWithCompletionBlock(completionBlock))
-        task.resume()
+        NSURLSession.sharedSession().dataTaskWithURL(jsonURL, completionHandler: handleSessionResponseWithCompletionBlock(completionBlock)).resume()
     }
     
     func handleSessionResponseWithCompletionBlock(competionBlock : (JSONDict) -> Void) -> (data :NSData?, response : NSURLResponse?, error : NSError?) -> Void
