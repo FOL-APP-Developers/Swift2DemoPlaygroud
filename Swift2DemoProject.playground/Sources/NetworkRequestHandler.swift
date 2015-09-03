@@ -23,7 +23,9 @@ public class NetworkRequestHandler {
             guard let data = data else { print("Request failed: ", error); return}
             do {
                 if let json = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments) as? JSONDict {
-                    competionBlock(json)
+                    dispatch_async(dispatch_get_main_queue(), {
+                        competionBlock(json)
+                    })
                 }
             } catch let error{
                 print("NSJSONSerialization.JSONObjectWithData failed with error: \(error)")
