@@ -23,6 +23,8 @@ public class PlaygroundTableViewController : UITableViewController {
         super.init(style: style)
         self.title = "TestViewController"
         tableView.registerClass(PlaygroundTableViewCell.self, forCellReuseIdentifier: PlaygroundTableViewCell.identifier)
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 44
     }
 
     required public init?(coder aDecoder: NSCoder) {

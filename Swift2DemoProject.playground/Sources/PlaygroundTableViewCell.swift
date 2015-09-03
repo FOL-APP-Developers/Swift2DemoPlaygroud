@@ -9,18 +9,48 @@ public class PlaygroundTableViewCell : UITableViewCell, FOCUSTeaser
 {
     static let identifier = "PlaygroundCell"
     
+    let headlineLabel :UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.font = UIFont.systemFontOfSize(16)
+        return label
+    }()
+
+    let overheadLabel : UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.font = UIFont.systemFontOfSize(12)
+        return label
+        }()
+    
     public var model : PlaygroundTeaserModel? {
         didSet{
-            self.textLabel?.text = model?.headline
+            headlineLabel.text = model?.headline
+            overheadLabel.text = model?.overhead
         }
     }
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?)
+    {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.contentView.backgroundColor = UIColor.redColor()
+        self.contentView.addSubview(headlineLabel)
+        self.contentView.addSubview(overheadLabel)
+        setLayoutContraints()
     }
 
-    required public init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder)
+    {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setLayoutContraints()
+    {
+        headlineLabel.translatesAutoresizingMaskIntoConstraints = false
+        overheadLabel.translatesAutoresizingMaskIntoConstraints = false
+        let views = ["headlineLabel" : headlineLabel, "overheadLabel" : overheadLabel]
+        
+        self.contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("|-[headlineLabel]-|", options: NSLayoutFormatOptions(), metrics: [:], views: views))
+        self.contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("|-[overheadLabel]-|", options: [], metrics: [:], views: views))
+        self.contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-[overheadLabel]-[headlineLabel]-|", options: [], metrics: [:], views: views))
     }
 }
