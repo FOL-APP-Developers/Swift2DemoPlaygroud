@@ -17,19 +17,17 @@ public class NetworkRequestHandler {
         NSURLSession.sharedSession().dataTaskWithURL(jsonURL, completionHandler: handleSessionResponseWithCompletionBlock(completionBlock)).resume()
     }
     
-    func handleSessionResponseWithCompletionBlock(competionBlock : (JSONDict) -> Void) -> (data :NSData?, response : NSURLResponse?, error : NSError?) -> Void
+    func handleSessionResponseWithCompletionBlock(competionBlock : (JSONDict) -> Void) (data :NSData?, response : NSURLResponse?, error : NSError?) -> Void
     {
-        return { (data, response, error) in
-            guard let data = data else { print("Request failed: ", error); return}
-            do {
-                if let json = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments) as? JSONDict {
-                    dispatch_async(dispatch_get_main_queue(), {
-                        competionBlock(json)
-                    })
-                }
-            } catch let error{
-                print("NSJSONSerialization.JSONObjectWithData failed with error: \(error)")
+        guard let data = data else { print("Request failed: ", error); return}
+        do {
+            if let json = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments) as? JSONDict {
+                dispatch_async(dispatch_get_main_queue(), {
+                    competionBlock(json)
+                })
             }
+        } catch let error{
+            print("NSJSONSerialization.JSONObjectWithData failed with error: \(error)")
         }
     }
 }
