@@ -7,15 +7,17 @@ XCPSetExecutionShouldContinueIndefinitely(true)
 
 let jsonURL = NSURL(string: "http://json.focus.de/home/?cst=7")
 
-let task = NSURLSession.sharedSession().dataTaskWithURL(jsonURL!) { (data, response, error) -> Void in
-    print(data)
+let task = NSURLSession.sharedSession().dataTaskWithURL(jsonURL!) { [jsonURL] (data :NSData?, response : NSURLResponse?, error : NSError?) -> Void in
+    print("The URL: \(jsonURL) \nResponded with : \(data)")
 }
 
 //task.resume()
 
 //: Jetzt müssen wir natürlich noch die Daten Deserialisieren
 
-let deserializeBlock: (data :NSData?, response : NSURLResponse?, error : NSError?) -> Void = { (data, response, error) -> Void in
+typealias NSURLDataTaskCompletionHandler = (NSData?, NSURLResponse?, NSError?) -> Void
+
+let deserializeBlock : NSURLDataTaskCompletionHandler = {(data, _, _) in
     guard let data = data else {return}
     let json = try? NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments)
     print(json)

@@ -1,18 +1,6 @@
 import Foundation
 //: Machen wir unser JSON zu Teaser Modelen
 
-func getOfflineJSON(completionBlock: (JSONDict) -> Void)
-{
-    if  let path = NSBundle.mainBundle().pathForResource("home", ofType: "json"),
-        let jsonData = NSData(contentsOfFile: path),
-        let deserializedJSON = try? NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.AllowFragments),
-        let json = deserializedJSON as? JSONDict
-    {
-        completionBlock(json)
-    }
-}
-
-
 struct PlaygroundTeaserModel{
     let identifier: Int
     let headline: String
@@ -35,6 +23,7 @@ struct PlaygroundTeaserModel{
     }
 }
 
+//: The Old Way
 func createTeaserModels(jsonArray: JSONArray) -> [PlaygroundTeaserModel]
 {
     var models: [PlaygroundTeaserModel] = []
@@ -46,6 +35,16 @@ func createTeaserModels(jsonArray: JSONArray) -> [PlaygroundTeaserModel]
     return models
 }
 
+//: A swiftier way
+
+func createTeaserModels2(jsonArray: JSONArray) -> [PlaygroundTeaserModel]
+{
+    return jsonArray.map({ (teaserJSON) in
+        return PlaygroundTeaserModel(json: teaserJSON)!
+    })
+}
+
+//: get rid of that pesky "!"
 func createTeaserModels3(jsonArray: JSONArray) -> [PlaygroundTeaserModel]
 {
     return jsonArray.flatMap({ (teaserJSON) in
@@ -53,14 +52,16 @@ func createTeaserModels3(jsonArray: JSONArray) -> [PlaygroundTeaserModel]
     })
 }
 
-func createTeaserModels2(jsonArray: JSONArray) -> [PlaygroundTeaserModel]
+//: An even swiftier way
+func createTeaserModels4(jsonArray: JSONArray) -> [PlaygroundTeaserModel]
 {
     return jsonArray.flatMap(PlaygroundTeaserModel.init)
 }
 
+//: Lets Test it
 getOfflineJSON { (json) -> Void in
     if let itemArray = json["items"] as? JSONArray {
-        let items = createTeaserModels2(itemArray)
+        let items = createTeaserModels4(itemArray)
         print(items)
     }
 }

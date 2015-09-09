@@ -10,10 +10,7 @@ public class PlaygroundTableViewController : UITableViewController {
     public func setModelsWithJSON(json : JSONDict)
     {
         guard let items = json["items"] as? JSONArray else {return}
-        
-        self.modelArray = items.flatMap{ teaserJSON in
-            return PlaygroundTeaserModel(json: teaserJSON)
-        }
+        self.modelArray = items.flatMap(PlaygroundTeaserModel.init)
     }
     
     override public init(style: UITableViewStyle) {

@@ -3,7 +3,8 @@
     <pages>
         <page name='XCPShowViewDemo'/>
         <page name='Asynchrones Laden von Daten'/>
-        <page name='Untitled Page 2'/>
+        <page name='Making Models'/>
+        <page name='Lets Build a Cell'/>
         <page name='Untitled Page'/>
     </pages>
 </playground>
