@@ -34,7 +34,11 @@ public class PlaygroundTableViewCell : UITableViewCell, FOCUSTeaser
         didSet{
             headlineLabel.text = model?.headline
             overheadLabel.text = model?.overhead
-            teaserImageView.image = UIImage(named: "ressort-auto_iPhone")
+            teaserImageView.image = model?.teaserImage.image
+            model?.teaserImage.updateViewBlock = { [weak self] (image) in
+                print("blub")
+                self?.teaserImageView.image = image
+            }
         }
     }
     
