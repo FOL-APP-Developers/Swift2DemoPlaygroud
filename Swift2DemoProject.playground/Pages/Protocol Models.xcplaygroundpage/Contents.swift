@@ -117,7 +117,7 @@ struct PlaygroundTeaserModel : TeaserModel{
             let ressort = FOLRessort(json: json),
             let identifier = json["id"] as? Int,
             let imageJSON = json["image"] as? JSONDict,
-            let imageModel = TeaserImageModel(json: imageJSON)
+            let imageModel = TeaserImageModel(json: imageJSON, placeHolderImage: ressort.standardImage())
             else {
                 return nil
         }
