@@ -35,10 +35,6 @@ public class PlaygroundTableViewCell : UITableViewCell, FOCUSTeaser
             headlineLabel.text = model?.headline
             overheadLabel.text = model?.overhead
             teaserImageView.image = model?.teaserImage.image
-            model?.teaserImage.updateViewBlock = { [weak self] (image) in
-                print("blub")
-                self?.teaserImageView.image = image
-            }
         }
     }
     

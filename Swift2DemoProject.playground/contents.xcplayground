@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <playground version='6.0' target-platform='ios' requires-full-environment='true' display-mode='raw' executeOnSourceChanges='false'>
     <pages>
-        <page name='XCPShowViewDemo'/>
         <page name='Asynchrones Laden von Daten'/>
         <page name='Making Models'/>
         <page name='Lets Build a Cell'/>
         <page name='Enums are your Friend'/>
         <page name='Protocol Oriented'/>
-        <page name='Untitled Page'/>
+        <page name='Protocol Models'/>
+        <page name='All Together#'/>
     </pages>
 </playground>
