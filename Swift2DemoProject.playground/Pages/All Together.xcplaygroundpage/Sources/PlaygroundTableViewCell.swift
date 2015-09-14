@@ -34,7 +34,9 @@ public class PlaygroundTableViewCell : UITableViewCell, FOCUSTeaser
         didSet{
             headlineLabel.text = model?.headline
             overheadLabel.text = model?.overhead
-            teaserImageView.image = model?.teaserImage.image
+            model?.teaserImage.loadImageAsync({ [weak self](image) -> Void in
+                self?.teaserImageView.image = image
+            })
         }
     }
     
