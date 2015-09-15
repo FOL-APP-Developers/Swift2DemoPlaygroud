@@ -1,4 +1,5 @@
 import UIKit
+import CoreSpotlight
 
 //: Fangen wir mit einem Essentiellen Protocol an
 protocol FOLContent {
@@ -132,5 +133,59 @@ struct PlaygroundTeaserModel : TeaserModel{
         self.ressort = ressort
         self.identifier = identifier
         self.teaserImage = imageModel
+    }
+}
+
+
+//: Wir können auch Protokolle nutzen um Funktionalität im nachhinein hinzuzufügen.
+protocol IndexableArticleModel : TeaserModel
+{
+    var ressortName : String? {get}
+}
+
+extension IndexableArticleModel {
+//: Swift 2.0 bietet auch eine einfache methode gegen Versionen zu checken
+    @available(iOS 9.0, *)
+    func contentAttributeSet() -> CSSearchableItemAttributeSet
+    {
+        let attributeSet = CSSearchableItemAttributeSet(itemContentType: "kUTTypeContent") //der String kUTTypeContent ist nur bedingt richtig an dieser Stelle
+        attributeSet.contentDescription = headline
+        attributeSet.title = overhead
+        attributeSet.subject = ressortName
+        if let image = self.teaserImage.image {
+            attributeSet.thumbnailData = UIImagePNGRepresentation(image)
+        }
+        
+        return attributeSet
+    }
+    
+    @available(iOS 9.0, *)
+    func registerInCoreSpotlight()
+    {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            let attributeSet = self.contentAttributeSet()
+            let item = CSSearchableItem(uniqueIdentifier: "\(self.identifier)", domainIdentifier: "article", attributeSet: attributeSet)
+            CSSearchableIndex.defaultSearchableIndex().indexSearchableItems([item]) { error in
+                    if error != nil {
+                        print(error?.localizedDescription)
+                    }
+                    else {
+                        print("Item: \(self.overhead) indexed")
+                    }
+            }
+        }
+    }
+    
+    //        if #available(iOS 9.0, *) {
+    //            registerInCoreSpotlight()
+    //        }
+}
+
+//: Jetzt machen wir noch unser PlaygroundTeaserModel Indexable
+extension PlaygroundTeaserModel : IndexableArticleModel {
+    var ressortName : String? {
+        get{
+            return self.ressort.rawValue
+        }
     }
 }
