@@ -29,8 +29,8 @@ let taskWithBlock = NSURLSession.sharedSession().dataTaskWithURL(jsonURL!, compl
 
 //: Das Wollen wir jetzt aber schon in einer schönen Klasse haben. Am besten noch ein Singelton damit alle Request von einer Instance geManaged werden können
 
-public class NetworkRequestHandler {
-    static let sharedInstance = NetworkRequestHandler()
+public class NetworkRequestHandlerTest {
+    static let sharedInstance = NetworkRequestHandlerTest()
     
     class func getOverviewJSON()
     {
@@ -64,7 +64,34 @@ public class NetworkRequestHandler {
 //NetworkRequestHandler.getOverviewJSON()
 //: Da drücken wir jetzt noch einen completion block rein
 
-//Do it, Just Do it
+public class NetworkRequestHandler {
+    static let sharedInstance = NetworkRequestHandler()
+    
+    public class func getOverviewJSON(completionBlock: (JSONDict) -> Void)
+    {
+        guard let jsonURL = NSURL(string: "http://json.focus.de/home/?cst=7") else {return}
+        
+        sharedInstance.getJSONForURL(jsonURL, withCompletionBlock: completionBlock)
+    }
+    
+    func getJSONForURL(jsonURL : NSURL, withCompletionBlock completionBlock: (JSONDict) -> Void) {
+        NSURLSession.sharedSession().dataTaskWithURL(jsonURL, completionHandler: handleSessionResponseWithCompletionBlock(completionBlock)).resume()
+    }
+    
+    func handleSessionResponseWithCompletionBlock(competionBlock : (JSONDict) -> Void) (data :NSData?, response : NSURLResponse?, error : NSError?) -> Void
+    {
+        guard let data = data else { print("Request failed: ", error); return}
+        do {
+            if let json = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments) as? JSONDict {
+                dispatch_async(dispatch_get_main_queue(), {
+                    competionBlock(json)
+                })
+            }
+        } catch let error{
+            print("NSJSONSerialization.JSONObjectWithData failed with error: \(error)")
+        }
+    }
+}
 
 //: Damit wir jetzt nict immer so lang warten Müssen laden wir das JSON aus einer Datei
 
