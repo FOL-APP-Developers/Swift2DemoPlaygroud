@@ -79,7 +79,7 @@ func getOfflineJSON(completionBlock: (JSONDict) -> Void)
     }
 }
 
-getOfflineJSON { (json) -> Void in
-    print(json)
-}
+//getOfflineJSON { (json) -> Void in
+//    print(json)
+//}
 

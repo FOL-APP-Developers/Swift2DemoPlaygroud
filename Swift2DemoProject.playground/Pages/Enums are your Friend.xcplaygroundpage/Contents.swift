@@ -107,6 +107,18 @@ enum UserLocation {
     case NotLocated(NotLocatedReason)
 }
 
+let location : UserLocation = UserLocation.NotLocated(.NotFound)
+
+switch location {
+case .Located(let location):
+    print(location)
+    break
+case .NotLocated(let reason):
+    print(reason)
+    break
+}
+
+//: Altenatives Ressort
 enum FOLRessort2 {
     case Auto
     case Digital
